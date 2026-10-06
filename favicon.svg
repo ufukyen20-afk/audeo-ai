@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120" fill="none">
+  <g stroke="#9C99FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Sol Ses Dalgası Kapsülleri -->
+    <rect x="8" y="52" width="5" height="16" rx="2.5" />
+    <rect x="17" y="42" width="6" height="36" rx="3" />
+    <rect x="27" y="30" width="7" height="60" rx="3.5" />
+    <rect x="38" y="42" width="6" height="36" rx="3" />
+
+    <!-- Ortadaki Ana Gövde (Sol Üstü Açık / Kavisli) -->
+    <path d="M 68 34 H 112 C 121 34 128 41 128 50 V 86 C 128 95 121 102 112 102 H 58 C 49 102 42 95 42 86 V 50 C 42 44 46 38 52 35" />
+
+    <!-- İçerideki İçi Boş Play Üçgeni -->
+    <polygon points="68,52 68,84 96,68" />
+
+    <!-- Sağ Film Şeridi Bölmesi ve Delikleri -->
+    <line x1="112" y1="34" x2="112" y2="102" stroke-width="4" />
+    <rect x="117" y="42" width="6" height="10" rx="2" fill="#9C99FF" stroke="none" />
+    <rect x="117" y="58" width="6" height="10" rx="2" fill="#9C99FF" stroke="none" />
+    <rect x="117" y="74" width="6" height="10" rx="2" fill="#9C99FF" stroke="none" />
+    <rect x="117" y="90" width="6" height="10" rx="2" fill="#9C99FF" stroke="none" />
+  </g>
+</svg>
