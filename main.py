@@ -279,10 +279,14 @@ def video_bilgisi(url: str = Query(..., description="YouTube video URL'si")):
 @app.get("/api/lut/{lut_name}")
 async def get_protected_lut(lut_name: str):
     safe_name = os.path.basename(lut_name)
-    cube_path = os.path.join("luts", f"{safe_name}.cube")
+    
+    # Vercel ve yerel ortamda dosya yolunu garantiye almak için
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    cube_path = os.path.join(base_dir, "luts", f"{safe_name}.cube")
     
     if not os.path.exists(cube_path):
-        return {"error": "LUT dosyası bulunamadı"}
+        return {"error": f"LUT dosyası bulunamadı: {safe_name}"}
         
     lut_matrix = parse_cube_to_json(cube_path)
     return lut_matrix
+
