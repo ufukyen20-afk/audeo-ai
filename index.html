@@ -352,6 +352,26 @@ document.getElementById('downloadForm').addEventListener('submit', async functio
     }
 });
 
+// Güvenli LUT Matrisi Çekme Fonksiyonu
+async function loadProtectedLUT(lutName) {
+    try {
+        const response = await fetch(`/api/lut/${lutName}`);
+        const lutData = await response.json();
+
+        if (lutData.error) {
+            console.error("LUT Yükleme Hatası:", lutData.error);
+            return null;
+        }
+
+        console.log("LUT Matrisi Başarıyla Alındı:", lutData.title);
+        return lutData;
+
+    } catch (error) {
+        console.error("Ağ İletişim Hatası:", error);
+        return null;
+    }
+}
+
 </script>
 
 

@@ -8,6 +8,8 @@ import os
 import uuid
 import shutil
 import zipfile
+from lut_converter import parse_cube_to_json
+
 class FormatSecenegi(str, Enum):
     mp4 = "mp4"
     mp3 = "mp3"
@@ -272,3 +274,15 @@ def video_bilgisi(url: str = Query(..., description="YouTube video URL'si")):
 
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Bilgi alınamadı: {str(e)}")
+
+
+@app.get("/api/lut/{lut_name}")
+async def get_protected_lut(lut_name: str):
+    safe_name = os.path.basename(lut_name)
+    cube_path = os.path.join("luts", f"{safe_name}.cube")
+    
+    if not os.path.exists(cube_path):
+        return {"error": "LUT dosyası bulunamadı"}
+        
+    lut_matrix = parse_cube_to_json(cube_path)
+    return lut_matrix
