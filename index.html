@@ -111,48 +111,27 @@ body {
             font-size: 0.9rem;
         }
     </style>
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+    <link rel="icon" type="image/png" href="/static/favicon-v2.png">
 
 </head>
 <body>
-    <div style="display: flex; align-items: center; justify-content: center; margin-top: 20px; gap: 14px;">
-  <svg width="52" height="38" viewBox="0 0 160 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-        <feGaussianBlur stdDeviation="3" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-    </defs>
-
-    <g filter="url(#neon-glow)" stroke="#A093FF" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="12" y1="52" x2="12" y2="68" stroke-width="7" />
-      <line x1="24" y1="40" x2="24" y2="80" stroke-width="8" />
-      <line x1="37" y1="26" x2="37" y2="94" stroke-width="9" />
-      <line x1="50" y1="40" x2="50" y2="80" stroke-width="8" />
-
-      <path d="M 46 24 H 128 C 139 24 148 33 148 44 V 76 C 148 87 139 96 128 96 H 46 C 35 96 26 87 26 76 V 44 C 26 33 35 24 46 24 Z" stroke-width="7" fill="none"/>
-      
-      <line x1="122" y1="24" x2="122" y2="96" stroke-width="6"/>
-      <line x1="122" y1="42" x2="148" y2="42" stroke-width="5"/>
-      <line x1="122" y1="60" x2="148" y2="60" stroke-width="5"/>
-      <line x1="122" y1="78" x2="148" y2="78" stroke-width="5"/>
-
-      <polygon points="68,42 68,78 98,60" fill="#A093FF" stroke="none" />
-    </g>
-  </svg>
-
-  <span style="color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 700; font-size: 32px; letter-spacing: -0.5px;">AuDeo</span>
-</div>
+    <header style="width: 100%; height: 85px; display: flex; align-items: center; padding-left: 32px; position: absolute; top: 0; left: 0;">
+    <div style="display: flex; align-items: center;">
+        <img src="/static/logo.png" alt="AuDeo Logo" style="height: 75px; width: auto;">
+    </div>
+</header>
 
 
 
-<div class="container my-5">
+
+
+
+
+<div class="container my-4 my-md-5">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card p-4">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card p-4 p-md-5">
+
                 <h3 class="text-center mb-4 font-weight-bold text-white d-flex align-items-center justify-content-center">
                     <i class="fa-solid fa-music gold-icon"></i>
                     <span>AuDeo AI Media Downloader</span>
