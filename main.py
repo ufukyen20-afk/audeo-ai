@@ -293,11 +293,12 @@ PROTECTED_LUTS = {
     }
 }
 
-@app.get("/lut/{lut_name}")
+@app.get("/api/lut/{lut_name}")
 async def get_protected_lut(lut_name: str):
     if lut_name in PROTECTED_LUTS:
         return PROTECTED_LUTS[lut_name]
     return {"error": "LUT bulunamadı"}
+
 
 
 
