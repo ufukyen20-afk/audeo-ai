@@ -375,6 +375,21 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
+  // FFmpeg Motoru Başlatma Mantığı
+  const { createFFmpeg, fetchFile } = FFmpeg;
+  const ffmpeg = createFFmpeg({ log: true });
+
+  async function loadFFmpeg() {
+    if (!ffmpeg.isLoaded()) {
+      console.log("FFmpeg motoru yükleniyor...");
+      await ffmpeg.load();
+      console.log("FFmpeg motoru hazır!");
+    }
+  }
+
+  // Sayfa yüklendiğinde motoru arka planda hazırla
+  window.addEventListener('DOMContentLoaded', loadFFmpeg);
+
 </script>
 
 
