@@ -381,9 +381,13 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-  // FFmpeg Motoru Başlatma Mantığı (v0.11.6)
+  // FFmpeg Motoru Başlatma Mantığı (0.11.6 Single-Thread / SharedArrayBuffer Gerektirmez)
   const { createFFmpeg } = FFmpeg;
-  const ffmpeg = createFFmpeg({ log: true });
+  const ffmpeg = createFFmpeg({ 
+    log: true,
+    corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
+  });
+
 
   async function loadFFmpeg() {
     if (!ffmpeg.isLoaded()) {
@@ -393,9 +397,8 @@ async function loadProtectedLUT(lutName) {
     }
   }
 
+
   window.addEventListener('DOMContentLoaded', loadFFmpeg);
-
-
 
 
 
