@@ -114,8 +114,10 @@ body {
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-V2.png">
 <link rel="shortcut icon" href="/static/favicon-V2.png">
 
-<!-- FFmpeg.wasm Kütüphanesi -->
-<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<!-- FFmpeg.wasm 0.12.x -->
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
+
 
 
 </head>
@@ -375,15 +377,12 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-    // FFmpeg Motoru Başlatma Mantığı
-  const { createFFmpeg, fetchFile } = FFmpeg;
-  const ffmpeg = createFFmpeg({
-    log: true,
-    corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
-  });
+      // FFmpeg Motoru Başlatma Mantığı (v0.12.x Uyumlu)
+  const { FFmpeg } = FFmpegWASM;
+  const ffmpeg = new FFmpeg();
 
   async function loadFFmpeg() {
-    if (!ffmpeg.isLoaded()) {
+    if (!ffmpeg.loaded) {
       console.log("FFmpeg motoru yükleniyor...");
       await ffmpeg.load();
       console.log("FFmpeg motoru hazır!");
@@ -392,6 +391,7 @@ async function loadProtectedLUT(lutName) {
 
   // Sayfa yüklendiğinde motoru arka planda hazırla
   window.addEventListener('DOMContentLoaded', loadFFmpeg);
+
 
 
 </script>
