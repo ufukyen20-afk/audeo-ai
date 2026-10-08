@@ -114,6 +114,8 @@ body {
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-V2.png">
 <link rel="shortcut icon" href="/static/favicon-V2.png">
 
+<!-- COOP/COEP Service Worker Düzeltmesi -->
+<script src="https://unpkg.com/coi-serviceworker/coi-serviceworker.min.js"></script>
 <!-- FFmpeg.wasm 0.12.x -->
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
@@ -377,32 +379,19 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-       // FFmpeg Motoru Başlatma Mantığı (CORS / Worker Uyumlu)
+         // FFmpeg Motoru Başlatma Mantığı
   const { FFmpeg } = FFmpegWASM;
-  const { toBlobURL } = FFmpegUtil;
   const ffmpeg = new FFmpeg();
-
 
   async function loadFFmpeg() {
     if (!ffmpeg.loaded) {
       console.log("FFmpeg motoru yükleniyor...");
-      
-      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
-      
-      await ffmpeg.load({
-        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-      });
-
-
+      await ffmpeg.load();
       console.log("FFmpeg motoru hazır!");
     }
   }
 
-
-  // Sayfa yüklendiğinde motoru arka planda hazırla
   window.addEventListener('DOMContentLoaded', loadFFmpeg);
-
 
 
 
