@@ -114,7 +114,7 @@ body {
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-V2.png">
 <link rel="shortcut icon" href="/static/favicon-V2.png">
 
-<script src="/static/coi-serviceworker.js"></script>
+
 <!-- FFmpeg.wasm 0.12.x -->
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
@@ -380,19 +380,24 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-         // FFmpeg Motoru Başlatma Mantığı
-  const { FFmpeg } = FFmpegWASM;
-  const ffmpeg = new FFmpeg();
+const { FFmpeg } = FFmpegWASM;
+const { toBlobURL } = FFmpegUtil;
+const ffmpeg = new FFmpeg();
 
-  async function loadFFmpeg() {
-    if (!ffmpeg.loaded) {
-      console.log("FFmpeg motoru yükleniyor...");
-      await ffmpeg.load();
-      console.log("FFmpeg motoru hazır!");
-    }
+async function loadFFmpeg() {
+  if (!ffmpeg.loaded) {
+    console.log("FFmpeg motoru yükleniyor...");
+
+    const coreURL = await toBlobURL('https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.js', 'text/javascript');
+    const wasmURL = await toBlobURL('https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd/ffmpeg-core.wasm', 'application/wasm');
+
+    await ffmpeg.load({ coreURL, wasmURL });
+    console.log("FFmpeg motoru hazır!");
   }
+}
 
-  window.addEventListener('DOMContentLoaded', loadFFmpeg);
+window.addEventListener('DOMContentLoaded', loadFFmpeg);
+
 
 
 
