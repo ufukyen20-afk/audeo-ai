@@ -401,6 +401,33 @@ async function loadProtectedLUT(lutName) {
 
   window.addEventListener('DOMContentLoaded', loadFFmpeg);
 
+// Medya İşleme ve Dönüştürme Fonksiyonu
+async function processMedia(fileBlob, outputFileName, ffmpegArgs) {
+  if (!ffmpeg.isLoaded()) {
+    await loadFFmpeg();
+  }
+
+  const inputFileName = 'input_media';
+  
+  // 1. Dosyayı Blob'dan Uint8Array'e çevirip FFmpeg sanal belleğine yaz
+  const fileData = new Uint8Array(await fileBlob.arrayBuffer());
+  ffmpeg.FS('writeFile', inputFileName, fileData);
+
+  console.log("İşlem başlatılıyor, komut:", ffmpegArgs);
+
+  // 2. FFmpeg komutunu çalıştır (örnek: -i input_media -ss 00:00:00 -t 10 output.mp4)
+  await ffmpeg.run('-i', inputFileName, ...ffmpegArgs, outputFileName);
+
+  // 3. İşlenmiş dosyayı sanal bellekten oku
+  const data = ffmpeg.FS('readFile', outputFileName);
+
+  // 4. Belleği temizle
+  ffmpeg.FS('unlink', inputFileName);
+  ffmpeg.FS('unlink', outputFileName);
+
+  // 5. İşlenmiş dosyayı indirilebilir Blob URL'e çevir ve döndür
+  return URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+}
 
 
 </script>
