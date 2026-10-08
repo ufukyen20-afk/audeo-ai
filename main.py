@@ -8,7 +8,7 @@ import os
 import uuid
 import shutil
 import zipfile
-from lut_converter import parse_cube_to_json
+
 
 class FormatSecenegi(str, Enum):
     mp4 = "mp4"
