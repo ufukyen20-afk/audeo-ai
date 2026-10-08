@@ -27,9 +27,9 @@ body {
   font-family: var(--font-family);
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  margin: 0;
 }
+
 
 .card {
   background-color: var(--bg-surface);
@@ -110,6 +110,265 @@ body {
             color: #a3a3a3;
             font-size: 0.9rem;
         }
+/* Masaüstü Sol Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80px;
+  height: 100vh;
+  background-color: var(--bg-surface);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.sidebar.collapsed {
+  transform: translateX(-100%);
+}
+
+.sidebar-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-bottom: 20px;
+  padding: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+.sidebar-item {
+  width: 100%;
+  padding: 14px 0;
+  color: rgba(248, 250, 252, 0.6);
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  border-left: 3px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.sidebar-item i {
+  font-size: 1.1rem;
+}
+
+.sidebar-item:hover, .sidebar-item.active {
+  color: var(--text-main);
+  background-color: rgba(255, 255, 255, 0.04);
+  border-left-color: var(--accent-action);
+}
+
+/* Sağ Üst Logo (Boyut Sınırlamalı) */
+.top-right-logo {
+  position: absolute;
+  top: 20px;
+  right: 32px;
+  z-index: 10;
+}
+
+.top-right-logo img {
+  height: 56px !important;
+  width: auto !important;
+  max-width: 220px !important;
+  display: block;
+}
+
+
+/* Masaüstü Gizliyken Ortada Çıkan Açma Butonu */
+.desktop-menu-trigger {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 999;
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: none;
+}
+
+/* Ana İçerik Taşıyıcısı (Kullanıcı Dostu Tam Ortalama) */
+.main-wrapper {
+  margin-left: 80px;
+  flex: 1;
+  min-height: 100vh;
+  padding: 40px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Tam dikey ve yatay ortalama */
+  width: calc(100% - 80px);
+  transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+.main-wrapper.full-width {
+  margin-left: 0;
+  width: 100%;
+}
+
+/* ================= MOBİL CSS (TAM DÜZELTME) ================= */
+@media (max-width: 768px) {
+  /* Masaüstü Sol Sidebar ve Açma Butonunu Mobilde Tamamen Gizle */
+  .sidebar, 
+  .desktop-menu-trigger, 
+  .top-right-logo {
+    display: none !important;
+  }
+
+  /* Ana Taşıyıcı Alanı Mobilde Sıfırla ve Dikey Hizala */
+  .main-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 76px 16px 32px 16px !important;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+ /* Mobil Üst Header Bar */
+.mobile-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 76px !important;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 10000 !important; /* En üst katmana çıkardık */
+}
+
+.mobile-header .hamburger-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.6rem;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 10001 !important;
+  position: relative;
+  pointer-events: auto !important; /* Tıklamayı zorunlu kıldık */
+}
+
+
+/* Sınıf adı ne olursa olsun header içindeki logoyu direkt büyütür */
+.mobile-header img {
+  height: 52px !important;
+  max-height: 52px !important;
+  width: auto !important;
+  display: block !important;
+  object-fit: contain;
+}
+
+
+
+  /* Mobil Tam Ekran Menü Overlay (Soldan Sağa Kayma Animasyonu) */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 76px;
+  left: 0;
+  width: 100%;
+  height: calc(100vh - 76px);
+  background-color: var(--bg-surface);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  
+  /* Soldan sağa kayma efekti */
+  transform: translateX(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, visibility 0.3s;
+}
+
+/* Aktif Olunca Soldan Sağa Ekrana Kayar */
+.mobile-menu-overlay.active {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+
+  .mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .mobile-menu-header h3 {
+    color: var(--text-main);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .mobile-menu-close {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  /* Mobilde 2 Sütunlu Araç Izgarası (Grid) */
+  .mobile-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .mobile-tool-card {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+  }
+
+  .mobile-tool-card i {
+    font-size: 1.5rem;
+    color: var(--accent-action);
+  }
+
+  .mobile-tool-card:active {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-header, .mobile-menu-overlay {
+    display: none !important;
+  }
+}
+
+
+
     </style>
     <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-V2.png">
 <link rel="shortcut icon" href="/static/favicon-V2.png">
@@ -126,81 +385,193 @@ body {
 
 </head>
 <body>
-    <header style="width: 100%; height: 85px; display: flex; align-items: center; padding-left: 32px; position: absolute; top: 0; left: 0;">
-    <div style="display: flex; align-items: center;">
-        <img src="/static/logo.png" alt="AuDeo Logo" style="height: 75px; width: auto;">
-    </div>
+
+
+  <!-- Mobil Üst Header (Sadece Mobilde Görünür) -->
+<header class="mobile-header">
+  <button id="hamburgerBtn" class="hamburger-btn" type="button" style="background: none; border: none; color: var(--text-main); font-size: 1.6rem; cursor: pointer;">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+  <div style="display: flex; align-items: center;">
+    <img src="/static/logo.png" alt="AuDeo Logo" style="height: 48px; width: auto;">
+  </div>
+  <div style="width: 24px;"></div> <!-- Dengeleme boşluğu -->
 </header>
 
 
+<!-- Mobil Tam Ekran Grid Menü Overlay -->
+<div id="mobileOverlay" class="mobile-menu-overlay">
+  <div style="display: flex; align-items: center; margin-bottom: 20px;">
+    <span style="font-weight: 600; font-size: 1.2rem;">Araçlar</span>
+  </div>
 
 
 
 
 
-<div class="container my-4 my-md-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8">
-            <div class="card p-4 p-md-5">
-
-                <h3 class="text-center mb-4 font-weight-bold text-white d-flex align-items-center justify-content-center">
-                    <i class="fa-solid fa-music gold-icon"></i>
-                    <span>AuDeo AI Media Downloader</span>
-                </h3>
-                
-                <form id="downloadForm">
-                    <div class="mb-3">
-                        <label for="videoUrl" class="form-label">YouTube Video Bağlantısı</label>
-                        <input type="url" class="form-control py-2" id="videoUrl" onpaste="setTimeout(() => kaliteyiOtomatikSaptar(this.value.trim()), 50)">
-
-                    </div>
-
-
-                    <div class="row mb-3">
-                        <div class="col-md-6 mb-2">
-                            <label for="formatTipi" class="form-label">Format</label>
-                            <select class="form-select" id="formatTipi" onchange="formatDegisti()">
-                                <option value="mp4" selected>Video (MP4)</option>
-                                <option value="mp3">Sadece Ses (MP3)</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-2" id="kaliteKutusu">
-                            <label for="videoKalitesi" class="form-label">Video Kalitesi</label>
-                            <select class="form-select" id="videoKalitesi">
-    <option value="en_yuksek" selected>En Yüksek (Orijinal)</option>
-    <option value="2160p">2160p 4K</option>
-    <option value="1440p">1440p 2K</option>
-    <option value="1080p">1080p Full HD</option>
-    <option value="720p">720p HD</option>
-    <option value="480p">480p SD</option>
-    <option value="360p">360p Düşük</option>
-</select>
-
-                        </div>
-                    </div>
-
-
-                    <button type="submit" class="btn btn-custom w-100 py-2 mt-2" id="indirBtn">
-                        İndirmeyi Başlat
-                    </button>
-                </form>
-
-
-                <div id="durum" class="mt-4 text-center d-none">
-    <div class="progress mb-2" style="height: 10px; background-color: #1f1f1f; border-radius: 5px;">
-        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 100%;"></div>
+    <!-- 2 Sütunlu Araç Grid Alanı -->
+    <div class="mobile-tools-grid">
+      <a href="#" class="mobile-tool-card active" data-tool="downloader">
+        <i class="fa-solid fa-download"></i>
+        <span>Video İndirici</span>
+      </a>
+      <a href="#" class="mobile-tool-card" data-tool="trimmer">
+        <i class="fa-solid fa-scissors"></i>
+        <span>Kesici</span>
+      </a>
+      <a href="#" class="mobile-tool-card" data-tool="converter">
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <span>Dönüştürücü</span>
+      </a>
+      <a href="#" class="mobile-tool-card" data-tool="volume">
+        <i class="fa-solid fa-volume-high"></i>
+        <span>Ses Yükseltici</span>
+      </a>
     </div>
-    <p id="durumMetni" class="mb-0 text-muted small">İndirme işleniyor, lütfen bekleyin...</p>
-</div>
+  </div>
 
 
-            </div>
+      <!-- Masaüstü Gizliyken Sayfada Kalan 3 Çizgi Açma Butonu -->
+  <button id="desktopOpenBtn" class="desktop-menu-trigger" title="Menüyü Aç">
+    <i class="fa-solid fa-bars"></i>
+  </button>
+
+
+  <!-- Masaüstü Sol Dikey Sidebar -->
+  <aside id="desktopSidebar" class="sidebar">
+    <!-- Sidebar İçi Kapatma / Toggle Butonu -->
+    <button id="desktopToggleBtn" class="sidebar-toggle-btn" title="Menüyü Gizle">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+
+    <a href="#" class="sidebar-item active" data-tool="downloader" title="Video / Medya İndirici">
+      <i class="fa-solid fa-download"></i>
+      <span>İndirici</span>
+    </a>
+    <a href="#" class="sidebar-item" data-tool="trimmer" title="Video / Ses Kesici">
+      <i class="fa-solid fa-scissors"></i>
+      <span>Kesici</span>
+    </a>
+    <a href="#" class="sidebar-item" data-tool="converter" title="Format Dönüştürücü">
+      <i class="fa-solid fa-arrows-rotate"></i>
+      <span>Dönüştür</span>
+    </a>
+    <a href="#" class="sidebar-item" data-tool="volume" title="Ses Yükseltici">
+      <i class="fa-solid fa-volume-high"></i>
+      <span>Ses Artır</span>
+    </a>
+  </aside>
+
+
+
+
+
+  <!-- Sağ Ana Çalışma Alanı Container -->
+  <main class="main-wrapper" style="position: relative;">
+  <div class="top-right-logo">
+    <img src="/static/logo.png" alt="AuDeo Logo">
+  </div>
+
+
+    <div class="content-container">
+      <!-- Varsayılan Açılış Ekranı: Video İndirici -->
+      <div id="downloaderToolView" class="tool-view">
+        <div style="text-align: center; margin-bottom: 28px;">
+          <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 8px;">AuDeo AI Media Downloader</h2>
+          <p style="color: rgba(248, 250, 252, 0.6); font-size: 0.9rem;">
+            Desteklenen platformlardan medya bağlantısını yapıştırın ve anında dönüştürün.
+          </p>
         </div>
+
+
+        <div class="card p-4">
+          <form id="downloadForm">
+            <div class="mb-3">
+              <label for="videoUrl" class="form-label">YouTube Video Bağlantısı</label>
+              <input type="url" class="form-control py-2" id="videoUrl" placeholder="https://..." onpaste="setTimeout(() => kaliteyiOtomatikSaptar(this.value.trim()), 50)">
+            </div>
+
+
+            <div class="row mb-3">
+              <div class="col-md-6 mb-2">
+                <label for="formatTipi" class="form-label">Format</label>
+                <select class="form-select" id="formatTipi" onchange="formatDegisti()">
+                  <option value="mp4" selected>Video (MP4)</option>
+                  <option value="mp3">Sadece Ses (MP3)</option>
+                </select>
+              </div>
+              <div class="col-md-6 mb-2" id="kaliteKutusu">
+                <label for="videoKalitesi" class="form-label">Video Kalitesi</label>
+                <select class="form-select" id="videoKalitesi">
+                  <option value="en_yuksek" selected>En Yüksek (Orijinal)</option>
+                  <option value="2160p">2160p 4K</option>
+                  <option value="1440p">1440p 2K</option>
+                  <option value="1080p">1080p Full HD</option>
+                  <option value="720p">720p HD</option>
+                  <option value="480p">480p SD</option>
+                  <option value="360p">360p Düşük</option>
+                </select>
+              </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-custom w-100 py-2 mt-2" id="indirBtn">
+              İndirmeyi Başlat
+            </button>
+          </form>
+
+
+          <div id="durum" class="mt-4 text-center d-none">
+            <div class="progress mb-2" style="height: 10px; background-color: #1f1f1f; border-radius: 5px;">
+              <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 100%;"></div>
+            </div>
+            <p id="durumMetni" class="mb-0 text-muted small">İndirme işleniyor, lütfen bekleyin...</p>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
+  </main>
 
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const desktopSidebar = document.getElementById('desktopSidebar');
+  const mainWrapper = document.querySelector('.main-wrapper');
+  const desktopToggleBtn = document.getElementById('desktopToggleBtn');
+  const desktopOpenBtn = document.getElementById('desktopOpenBtn');
+
+  // --- MASAÜSTÜ SIDEBAR TOGGLE ---
+  function toggleDesktopSidebar() {
+    desktopSidebar.classList.toggle('collapsed');
+    mainWrapper.classList.toggle('full-width');
+
+    if (desktopSidebar.classList.contains('collapsed')) {
+      desktopOpenBtn.style.display = 'block';
+    } else {
+      desktopOpenBtn.style.display = 'none';
+    }
+  }
+
+  if (desktopToggleBtn) desktopToggleBtn.addEventListener('click', toggleDesktopSidebar);
+  if (desktopOpenBtn) desktopOpenBtn.addEventListener('click', toggleDesktopSidebar);
+            // --- MOBİL MENÜ TOGGLE ---
+    const mobileHamburgerBtn = document.getElementById('hamburgerBtn');
+    const mobileMenuOverlay = document.getElementById('mobileOverlay');
+
+
+    if (mobileHamburgerBtn && mobileMenuOverlay) {
+      mobileHamburgerBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mobileMenuOverlay.classList.toggle('active');
+      });
+    }
+
+
+
+});
+
+
     const urlInput = document.getElementById('videoUrl');
 
 async function kaliteyiOtomatikSaptar(url) {
@@ -428,6 +799,74 @@ async function processMedia(fileBlob, outputFileName, ffmpegArgs) {
   // 5. İşlenmiş dosyayı indirilebilir Blob URL'e çevir ve döndür
   return URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
 }
+// 1. Girdi Kaynağını Yakalama ve Belleğe Alma
+async function getMediaBlob(sourceType, sourceData) {
+  if (sourceType === 'url') {
+    // URL üzerinden gelen medyayı indirip Blob'a dönüştürür
+    const response = await fetch(sourceData);
+    if (!response.ok) throw new Error("Medyayı indirme başarısız oldu.");
+    return await response.blob();
+  } 
+  else if (sourceType === 'file') {
+    // Cihazdan seçilen dosyayı doğrudan Blob/File olarak döndürür
+    return sourceData; 
+  }
+}
+
+// 2. Arayüz Parametrelerinden FFmpeg Komutu Oluşturma
+function buildFFmpegArgs(options = {}) {
+  const { startTime, endTime, volumeBoost, outputFormat = 'mp4' } = options;
+  const args = [];
+
+
+  // Başlangıç zamanı (-ss 00:00:05 veya saniye cinsinden)
+  if (startTime) {
+    args.push('-ss', startTime.toString());
+  }
+
+
+  // Bitiş / Süre (-t 10)
+  if (endTime) {
+    args.push('-t', endTime.toString());
+  }
+
+
+  // Ses yükseltme filtresi (-filter:a "volume=1.5")
+  if (volumeBoost && volumeBoost !== '1.0' && outputFormat !== 'gif') {
+    args.push('-filter:a', `volume=${volumeBoost}`);
+  }
+
+
+  // Çıktı dosya adı oluşturma (örnek: output.mp3, output.gif, output.mp4)
+  const outputFileName = `output.${outputFormat}`;
+
+
+  return { args, outputFileName };
+}
+
+// 3, 4 & 5. Tüm İş Akışını Birleştiren Ana Çalıştırıcı Fonksiyon
+async function handleMediaPipeline(sourceType, sourceData, userOptions = {}) {
+  try {
+    console.log("1. Medya kaynağı alınıyor...");
+    const fileBlob = await getMediaBlob(sourceType, sourceData);
+
+
+    console.log("2. FFmpeg komutları hazırlanıyor...");
+    const { args, outputFileName } = buildFFmpegArgs(userOptions);
+
+
+    console.log("3. İşlem başlatılıyor...");
+    const resultDownloadUrl = await processMedia(fileBlob, outputFileName, args);
+
+
+    console.log("İşlem Başarılı! İndirme URL'i:", resultDownloadUrl);
+    return resultDownloadUrl;
+  } catch (error) {
+    console.error("İşlem Sırasında Hata Oluştu:", error);
+    throw error;
+  }
+}
+
 
 
 </script>
