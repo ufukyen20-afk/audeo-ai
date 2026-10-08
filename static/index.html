@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuDeo AI - Video & Müzik İndirici</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap');
+
+:root {
+  /* Renk Paleti Tanımları */
+  --bg-primary: #0F172A;       /* Derin Gece Mavisi / Koyu Kömür */
+  --bg-surface: #1E293B;       /* Panel ve Kart Kaplamaları */
+  --accent-action: #6366F1;    /* Neon Mavi / Elektrik Mor */
+  --accent-success: #22C55E;   /* Canlı Yeşil (İndir / Onay) */
+  --text-main: #F8FAFC;        /* Mat Beyaz Tipografi */
+  
+  /* Font Tanımı */
+  --font-family: 'Inter', 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+  .btn-primary-action {
+    background: linear-gradient(135deg, var(--accent-action) 0%, #3b82f6 100%);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.39);
+  }
+
+  .btn-primary-action:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
+    box-shadow: 0 6px 20px 0 rgba(99, 102, 241, 0.55);
+    transform: translateY(-1px);
+  }
+
+        .gold-icon {
+            color: #FFD700 !important; /* Canlı Altın Rengi */
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+            margin-right: 8px;
+        }
+        .form-control, .form-select {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #252525;
+            border-color: #FFD700;
+            color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.15);
+        }
+        .form-control::placeholder {
+            color: #666;
+        }
+        .btn-custom {
+  background: linear-gradient(135deg, #6366F1 0%, #3B82F6 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+}
+
+.btn-custom:hover {
+  background: linear-gradient(135deg, #4F46E5 0%, #2563EB 100%) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5) !important;
+}
+.btn-success-custom {
+  background: #22C55E !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3) !important;
+}
+
+
+.btn-success-custom:hover {
+  background: #16A34A !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.5) !important;
+}
+
+
+        .form-label {
+            color: #a3a3a3;
+            font-size: 0.9rem;
+        }
+    </style>
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-v2.png">
+<link rel="shortcut icon" href="/static/favicon-v2.png">
+
+
+</head>
+<body>
+    <header style="width: 100%; height: 85px; display: flex; align-items: center; padding-left: 32px; position: absolute; top: 0; left: 0;">
+    <div style="display: flex; align-items: center;">
+        <img src="/static/logo.png" alt="AuDeo Logo" style="height: 75px; width: auto;">
+    </div>
+</header>
+
+
+
+
+
+
+
+<div class="container my-4 my-md-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card p-4 p-md-5">
+
+                <h3 class="text-center mb-4 font-weight-bold text-white d-flex align-items-center justify-content-center">
+                    <i class="fa-solid fa-music gold-icon"></i>
+                    <span>AuDeo AI Media Downloader</span>
+                </h3>
+                
+                <form id="downloadForm">
+                    <div class="mb-3">
+                        <label for="videoUrl" class="form-label">YouTube Video Bağlantısı</label>
+                        <input type="url" class="form-control py-2" id="videoUrl" onpaste="setTimeout(() => kaliteyiOtomatikSaptar(this.value.trim()), 50)">
+
+                    </div>
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-2">
+                            <label for="formatTipi" class="form-label">Format</label>
+                            <select class="form-select" id="formatTipi" onchange="formatDegisti()">
+                                <option value="mp4" selected>Video (MP4)</option>
+                                <option value="mp3">Sadece Ses (MP3)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-2" id="kaliteKutusu">
+                            <label for="videoKalitesi" class="form-label">Video Kalitesi</label>
+                            <select class="form-select" id="videoKalitesi">
+    <option value="en_yuksek" selected>En Yüksek (Orijinal)</option>
+    <option value="2160p">2160p 4K</option>
+    <option value="1440p">1440p 2K</option>
+    <option value="1080p">1080p Full HD</option>
+    <option value="720p">720p HD</option>
+    <option value="480p">480p SD</option>
+    <option value="360p">360p Düşük</option>
+</select>
+
+                        </div>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-custom w-100 py-2 mt-2" id="indirBtn">
+                        İndirmeyi Başlat
+                    </button>
+                </form>
+
+
+                <div id="durum" class="mt-4 text-center d-none">
+    <div class="progress mb-2" style="height: 10px; background-color: #1f1f1f; border-radius: 5px;">
+        <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 100%;"></div>
+    </div>
+    <p id="durumMetni" class="mb-0 text-muted small">İndirme işleniyor, lütfen bekleyin...</p>
+</div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    const urlInput = document.getElementById('videoUrl');
+
+async function kaliteyiOtomatikSaptar(url) {
+    if (!url) return;
+
+    const kaliteKutusu = document.getElementById('videoKalitesi');
+    const durumMetni = document.getElementById('durumMetni');
+    const durum = document.getElementById('durum');
+
+    try {
+        if (durum) durum.classList.remove('d-none');
+        if (durumMetni) durumMetni.innerText = "Video kalitesi kontrol ediliyor...";
+
+        const response = await fetch(`/info?url=${encodeURIComponent(url)}`);
+        if (!response.ok) throw new Error("Bilgi alınamadı");
+
+        const data = await response.json();
+        const maxH = data.max_height;
+
+        let hedefKalite = 'en_yuksek';
+        if (maxH >= 2160) hedefKalite = '2160p';
+        else if (maxH >= 1440) hedefKalite = '1440p';
+        else if (maxH >= 1080) hedefKalite = '1080p';
+        else if (maxH >= 720) hedefKalite = '720p';
+        else if (maxH >= 480) hedefKalite = '480p';
+        else if (maxH >= 360) hedefKalite = '360p';
+
+        if (kaliteKutusu) {
+            kaliteKutusu.value = hedefKalite;
+        }
+
+        if (durumMetni) durumMetni.innerText = `En yüksek kalite tespit edildi: ${maxH}p`;
+        if (durum) setTimeout(() => durum.classList.add('d-none'), 3000);
+    } catch (err) {
+        if (durum) durum.classList.add('d-none');
+        console.log("Kalite bilgisi çekilemedi:", err);
+    }
+}
+
+
+
+
+
+
+
+function formatDegisti() {
+    const format = document.getElementById('formatTipi').value;
+    const kaliteKutusu = document.getElementById('kaliteKutusu');
+    
+    if (format === 'mp3') {
+        kaliteKutusu.style.display = 'none';
+    } else {
+        kaliteKutusu.style.display = 'block';
+    }
+}
+
+
+document.getElementById('downloadForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const url = document.getElementById('videoUrl').value;
+    const format = document.getElementById('formatTipi').value;
+    const kalite = document.getElementById('videoKalitesi').value;
+    
+    const durum = document.getElementById('durum');
+    const durumMetni = document.getElementById('durumMetni');
+    const indirBtn = document.getElementById('indirBtn');
+    const progressBar = document.getElementById('progressBar');
+    
+    durum.classList.remove('d-none');
+    indirBtn.disabled = true;
+    progressBar.style.width = '0%';
+    durumMetni.innerText = "İndirme başlatıldı (%0)...";
+          indirBtn.classList.remove('btn-success-custom');
+      indirBtn.classList.add('btn-custom');
+
+
+
+    let apiUrl = `/download?url=${encodeURIComponent(url)}&format_tipi=${format}`;
+    if (format === 'mp4') {
+        apiUrl += `&video_kalitesi=${kalite}`;
+    }
+
+    try {
+        const response = await fetch(apiUrl, { method: 'POST' });
+        if (!response.ok) throw new Error('İndirme sırasında bir hata oluştu.');
+
+        const reader = response.body.getReader();
+        const contentLength = +response.headers.get('Content-Length');
+        let receivedLength = 0;
+        let chunks = [];
+
+        while(true) {
+            const {done, value} = await reader.read();
+            if (done) break;
+
+            chunks.push(value);
+            receivedLength += value.length;
+
+            if (contentLength) {
+                const yuzde = Math.round((receivedLength / contentLength) * 100);
+                progressBar.style.width = `${yuzde}%`;
+                durumMetni.innerText = `İndiriliyor: %${yuzde}`;
+            }
+        }
+
+              // Seçilen formata göre uzantı ve medya türünü belirle
+      const uzanti = format === 'mp3' ? '.mp3' : '.mp4';
+      const mimeType = format === 'mp3' ? 'audio/mpeg' : 'video/mp4';
+
+      const blob = new Blob(chunks, { type: mimeType });
+      const downloadUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+
+            // Sunucudan gelen başlığı kontrol et
+      const contentDisposition = response.headers.get('Content-Disposition');
+      let filename = `indirilen_medya${uzanti}`;
+
+
+      if (contentDisposition) {
+        const match = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
+        if (match && match[1]) {
+          let extracted = decodeURIComponent(match[1]).trim();
+          if (!extracted.endsWith('.mp4') && !extracted.endsWith('.mp3')) {
+            extracted += uzanti;
+          }
+          filename = extracted;
+        }
+      }
+
+
+
+      a.download = filename;
+
+
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+              // İndirme bittiğinde yeşil yap
+      indirBtn.classList.remove('btn-custom');
+      indirBtn.classList.add('btn-success-custom');
+      durumMetni.innerText = "İndirme tamamlandı! Dosyanız kaydedildi.";
+
+      // Kaydet penceresi açıldıktan 3 saniye sonra eski haline döndür
+      setTimeout(() => {
+        indirBtn.classList.remove('btn-success-custom');
+        indirBtn.classList.add('btn-custom');
+        durumMetni.innerText = "";
+      }, 3000);
+
+    } catch (err) {
+        durumMetni.innerText = "Hata: " + err.message;
+    } finally {
+        indirBtn.disabled = false;
+    }
+});
+
+// Güvenli LUT Matrisi Çekme Fonksiyonu
+async function loadProtectedLUT(lutName) {
+    try {
+        const response = await fetch(`/api/lut/${lutName}`);
+        const lutData = await response.json();
+
+        if (lutData.error) {
+            console.error("LUT Yükleme Hatası:", lutData.error);
+            return null;
+        }
+
+        console.log("LUT Matrisi Başarıyla Alındı:", lutData.title);
+        return lutData;
+
+    } catch (error) {
+        console.error("Ağ İletişim Hatası:", error);
+        return null;
+    }
+}
+
+</script>
+
+
+</body>
+</html>
+
