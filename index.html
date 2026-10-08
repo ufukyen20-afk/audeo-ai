@@ -377,7 +377,7 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-       // FFmpeg Motoru Başlatma Mantığı (CORS / Worker Uyumlu)
+         // FFmpeg Motoru Başlatma Mantığı (0.12.x Tam Cross-Origin Düzeltmesi)
   const { FFmpeg } = FFmpegWASM;
   const { toBlobURL } = FFmpegUtil;
   const ffmpeg = new FFmpeg();
@@ -392,6 +392,7 @@ async function loadProtectedLUT(lutName) {
       await ffmpeg.load({
         coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
         wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+        classWorkerURL: await toBlobURL('https://unpkg.com/@ffmpeg/ffmpeg@0.12.7/dist/umd/ffmpeg-core.worker.js', 'text/javascript')
       });
 
 
