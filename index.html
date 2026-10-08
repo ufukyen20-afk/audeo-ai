@@ -381,10 +381,11 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-  // FFmpeg Motoru Başlatma Mantığı (0.11.6 Single-Thread / SharedArrayBuffer Gerektirmez)
+   // FFmpeg Motoru Başlatma Mantığı (v0.11.6 ST Sürüm Uyumlu)
   const { createFFmpeg } = FFmpeg;
   const ffmpeg = createFFmpeg({ 
     log: true,
+    mainName: 'main',
     corePath: 'https://unpkg.com/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js'
   });
 
