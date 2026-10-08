@@ -377,20 +377,33 @@ async function loadProtectedLUT(lutName) {
     }
 }
 
-      // FFmpeg Motoru Başlatma Mantığı (v0.12.x Uyumlu)
+       // FFmpeg Motoru Başlatma Mantığı (CORS / Worker Uyumlu)
   const { FFmpeg } = FFmpegWASM;
+  const { toBlobURL } = FFmpegUtil;
   const ffmpeg = new FFmpeg();
+
 
   async function loadFFmpeg() {
     if (!ffmpeg.loaded) {
       console.log("FFmpeg motoru yükleniyor...");
-      await ffmpeg.load();
+      
+      const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+      
+      await ffmpeg.load({
+        coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+        wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+      });
+
+
       console.log("FFmpeg motoru hazır!");
     }
   }
 
+
   // Sayfa yüklendiğinde motoru arka planda hazırla
   window.addEventListener('DOMContentLoaded', loadFFmpeg);
+
+
 
 
 
