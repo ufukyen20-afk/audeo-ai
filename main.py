@@ -12,7 +12,11 @@ import zipfile
 
 class FormatSecenegi(str, Enum):
     mp4 = "mp4"
+    webm = "webm"
+    mkv = "mkv"
     mp3 = "mp3"
+    m4a = "m4a"
+    wav = "wav"
 class VideoKalite(str, Enum):
     en_yuksek = "best"
     p2160 = "2160"
@@ -90,20 +94,21 @@ def video_indir_api(
     
         # Format ve Kalite Konfigürasyonu
         # Format ve Kalite Konfigürasyonu
-    if format_tipi == FormatSecenegi.mp3:
+    if format_tipi in [FormatSecenegi.mp3, FormatSecenegi.m4a, FormatSecenegi.wav]:
         ydl_opts = {
             'format': 'bestaudio/best',
             'postprocessors': [{
-    'key': 'FFmpegExtractAudio',
-    'preferredcodec': 'mp3',
-    'preferredquality': '320',
-}],
-'outtmpl': '%(title)s_%(id)s.%(ext)s',
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': format_tipi.value,
+                'preferredquality': '320',
+            }],
+            'outtmpl': '%(title)s_%(id)s.%(ext)s',
             'noplaylist': True,
             'http_headers': {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/'
             }
         }
+
     else:
         kalite_sayi = "".join(filter(str.isdigit, str(video_kalitesi)))
         if not kalite_sayi or video_kalitesi == "en_yuksek":
@@ -111,10 +116,9 @@ def video_indir_api(
         else:
             format_str = f'bestvideo[height<={kalite_sayi}]+bestaudio/best'
 
-
-        
         ydl_opts = {
             'format': format_str,
+            'merge_output_format': format_tipi.value,
             'outtmpl': '%(title)s_%(height)sp_%(id)s.%(ext)s',
             'outtmpl_na_placeholder': '',
             'noplaylist': True,
@@ -122,35 +126,45 @@ def video_indir_api(
             'cachedir': False,
             'rm_cachedir': True,
             'http_headers': {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/'
             }
         }
+
 
     ffmpeg_bin = ffmpeg_bul()
     if ffmpeg_bin:
         ydl_opts['ffmpeg_location'] = ffmpeg_bin
-        ydl_opts['merge_output_format'] = 'mp4'  # Ayrı ses/videoyu mp4 olarak birleştirmeye zorla
+        if format_tipi not in [FormatSecenegi.mp3, FormatSecenegi.m4a, FormatSecenegi.wav]:
+            ydl_opts['merge_output_format'] = format_tipi.value
+
+
+
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(url, download=True)
             hazirlanan_yol = ydl.prepare_filename(info)
 
-            # MP3 isteği için uzantıyı zorla .mp3 yap
-            if format_tipi == FormatSecenegi.mp3:
-                dosya_yolu = os.path.splitext(hazirlanan_yol)[0] + ".mp3"
-            else:
-                # Gerçekten diske kaydedilen dosyayı (webm, mp4, mkv) kontrol edip bul
-                kok_yol = os.path.splitext(hazirlanan_yol)[0]
-                dosya_yolu = hazirlanan_yol
-                for uzanti in ['.mp4', '.webm', '.mkv']:
-                    if os.path.exists(kok_yol + uzanti):
-                        dosya_yolu = kok_yol + uzanti
-                        break
-            return FileResponse(
-                path=dosya_yolu, 
-                filename=os.path.basename(dosya_yolu),
-                media_type='application/octet-stream'
-            )
+        # Ses veya video fark etmeksizin diske kaydedilen gerçek dosyayı bul
+        kok_yol = os.path.splitext(hazirlanan_yol)[0]
+        dosya_yolu = hazirlanan_yol
+
+        # Olası uzantıları kontrol et
+        olasi_uzantilar = [f".{format_tipi.value}", ".mp3", ".m4a", ".wav", ".mp4", ".webm", ".mkv"]
+        for uzanti in olasi_uzantilar:
+            if os.path.exists(kok_yol + uzanti):
+                dosya_yolu = kok_yol + uzanti
+                break
+
+        import urllib.parse
+        dosya_adi = os.path.basename(dosya_yolu)
+        encoded_filename = urllib.parse.quote(dosya_adi)
+
+        return FileResponse(
+            path=dosya_yolu,
+            filename=dosya_adi,
+            headers={"Content-Disposition": f"attachment; filename*=UTF-8''{encoded_filename}"},
+            media_type='application/octet-stream'
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"İndirme hatası: {str(e)}")
 @app.get("/info", summary="Video Bilgilerini Getir", tags=["Video İşlemleri"])
