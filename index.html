@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuDeo AI - Video & Müzik İndirici</title>
+    <!-- Wavesurfer.js CDN -->
+<script src="https://unpkg.com/wavesurfer.js@7"></script>
+<script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -367,6 +370,188 @@ body {
   }
 }
 
+input:focus, select:focus {
+    outline: none !important;
+    border-color: #6866e1 !important;
+    box-shadow: 0 0 10px rgba(104, 102, 225, 0.4) !important;
+}
+
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff !important;
+    -webkit-box-shadow: 0 0 0px 1000px #1e1e1e inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Wavesurfer v7 Bölge Kenar Tutamaçları */
+::part(region-handle),
+.wavesurfer-region-handle {
+    background-color: #38bdf8 !important;
+    width: 6px !important;
+    cursor: ew-resize !important;
+}
+
+::part(region-handle-left) {
+    left: 0 !important;
+}
+
+::part(region-handle-right) {
+    right: 0 !important;
+}
+#trimmerWaveformContainer {
+    background-color: transparent !important;
+    position: relative;
+}
+
+::part(region) {
+    background-color: transparent !important;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6) !important;
+    z-index: 6;
+}
+/* Kesici aktif olduğunda ana kutunun genişlik sınırını kaldırır ve uçtan uca yayar */
+.content-container:has(#trimmerSection:not([style*="display: none"])) {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 10px !important; /* Kenar boşluğunu minimuma indirerek tamamen yayılmasını sağlar */
+    margin: 0 !important;
+}
+
+#trimmerSection {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+}
+/* Sadece "Kes ve İndir" butonunu eski zarif boyutuna ve ortasına sabitleyelim */
+#processTrimBtn {
+    width: auto !important;
+    min-width: 250px !important;
+    max-width: 400px !important;
+    display: inline-block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+/* Alt Sabit Banner Ortak Stili */
+#bottomControlBanner {
+    position: fixed;
+    bottom: 0;
+    left: 70px; /* Dikey menü açıkken bırakılacak boşluk */
+    right: 0;
+    background: #1e293b;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 9999;
+    border-top: 1px solid #334155;
+    box-sizing: border-box;
+    transition: left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    /* Alt banner'ı mobilde tam ekrana oturt */
+    #bottomControlBanner {
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        padding: 12px 10px !important;
+        box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    /* Play (Oynat/Durdur) butonunu orantılı yap */
+    #playPauseBtn {
+        padding: 8px 20px !important;
+        font-size: 14px !important;
+        width: 100% !important;
+        max-width: 220px !important;
+        margin-bottom: 8px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    /* Zaman paneli ana kapsayıcısını dikey yap */
+    #bottomControlBanner > span[style*="inline-flex"] {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 8px !important;
+        margin-left: 0 !important;
+    }
+
+    /* Sayaç kutularını eşit ve tam genişlik yap */
+    #bottomControlBanner > span > span {
+        display: flex !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 8px 12px !important;
+    }
+
+    /* Sayaç yazılarını ortala */
+    #bottomControlBanner input {
+        width: 80px !important;
+        text-align: center !important;
+    }
+}
+    /* Mobilde şarkı adını orijinal konumunda tutalım */
+    #mediaFileName {
+        top: 10px !important;
+        z-index: 1 !important;
+    }
+
+    /* Mobilde zaman göstergesini üst katmana çıkarıp şık, okunaklı bir baloncuk yapalım */
+    #hoverTimeIndicator {
+        display: block !important;
+        pointer-events: auto !important;
+        top: -28px !important;
+        z-index: 10 !important;
+        transform: translateX(-50%) !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+        border: 1px solid #475569 !important;
+        border-radius: 4px !important;
+        padding: 2px 6px !important;
+        font-size: 11px !important;
+        color: #38bdf8 !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+    }
+    /* Mobilde imlecin (cursor / playhead) üzerindeki süre etiketinin de görünmesini ve sabit kalmasını sağla */
+    wave wave cursor, 
+    #hoverTimeIndicator,
+    .wavesurfer-cursor {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+    /* Tıklandığında veya oynatılırken imlecin üstünde beliren zaman etiketinin tasarımı */
+    .wavesurfer-time-indicator, 
+    wave wave cursor span {
+        display: inline-block !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+        border: 1px solid #475569 !important;
+        border-radius: 4px !important;
+        padding: 2px 6px !important;
+        font-size: 11px !important;
+        color: #38bdf8 !important;
+        position: absolute !important;
+        top: -25px !important;
+        transform: translateX(-50%) !important;
+        white-space: nowrap !important;
+        z-index: 10 !important;
+    }
+    /* Tıklama veya oynatma sırasında imleç üzerindeki etiketin gizlenmesini önle */
+    wave wave cursor[style*="opacity: 1"] + #hoverTimeIndicator,
+    .wavesurfer-cursor + #hoverTimeIndicator {
+        display: block !important;
+        opacity: 1 !important;
+    }
+
+
 
 
     </style>
@@ -378,14 +563,12 @@ body {
 <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
 
 
-
-
-
-
+<!-- noUiSlider CSS ve JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
 </head>
 <body>
-
 
   <!-- Mobil Üst Header (Sadece Mobilde Görünür) -->
 <header class="mobile-header">
@@ -398,16 +581,11 @@ body {
   <div style="width: 24px;"></div> <!-- Dengeleme boşluğu -->
 </header>
 
-
 <!-- Mobil Tam Ekran Grid Menü Overlay -->
 <div id="mobileOverlay" class="mobile-menu-overlay">
   <div style="display: flex; align-items: center; margin-bottom: 20px;">
     <span style="font-weight: 600; font-size: 1.2rem;">Araçlar</span>
   </div>
-
-
-
-
 
     <!-- 2 Sütunlu Araç Grid Alanı -->
     <div class="mobile-tools-grid">
@@ -430,12 +608,10 @@ body {
     </div>
   </div>
 
-
       <!-- Masaüstü Gizliyken Sayfada Kalan 3 Çizgi Açma Butonu -->
   <button id="desktopOpenBtn" class="desktop-menu-trigger" title="Menüyü Aç">
     <i class="fa-solid fa-bars"></i>
   </button>
-
 
   <!-- Masaüstü Sol Dikey Sidebar -->
   <aside id="desktopSidebar" class="sidebar">
@@ -443,7 +619,6 @@ body {
     <button id="desktopToggleBtn" class="sidebar-toggle-btn" title="Menüyü Gizle">
       <i class="fa-solid fa-bars"></i>
     </button>
-
 
     <a href="#" class="sidebar-item active" data-tool="downloader" title="Video / Medya İndirici">
       <i class="fa-solid fa-download"></i>
@@ -463,42 +638,46 @@ body {
     </a>
   </aside>
 
-
-
-
-
   <!-- Sağ Ana Çalışma Alanı Container -->
   <main class="main-wrapper" style="position: relative;">
   <div class="top-right-logo">
     <img src="/static/logo.png" alt="AuDeo Logo">
   </div>
 
-
     <div class="content-container">
       <!-- Varsayılan Açılış Ekranı: Video İndirici -->
       <div id="downloaderToolView" class="tool-view">
         <div style="text-align: center; margin-bottom: 28px;">
-          <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 8px;">AuDeo AI Media Downloader</h2>
-          <p style="color: rgba(248, 250, 252, 0.6); font-size: 0.9rem;">
+          <div style="text-align: center; margin-bottom: 15px;">
+    <img src="/static/logo.png" alt="AuDeo AI" style="max-height: 140px; width: auto; display: inline-block;">
+</div>
+
+          <p style="color: rgba(248, 250, 252, 0.6); font-size: 1.1rem; margin-bottom: 30px;">
             Desteklenen platformlardan medya bağlantısını yapıştırın ve anında dönüştürün.
           </p>
         </div>
 
-
+            <form id="downloadForm">
         <div class="card p-4">
-          <form id="downloadForm">
             <div class="mb-3">
-              <label for="videoUrl" class="form-label">YouTube Video Bağlantısı</label>
-              <input type="url" class="form-control py-2" id="videoUrl" placeholder="https://..." onpaste="setTimeout(() => kaliteyiOtomatikSaptar(this.value.trim()), 50)">
+              <label for="videoUrl" class="form-label">Medya Video Bağlantısı</label>
+              <input type="url" class="form-control py-2" id="videoUrl" autocomplete="off" placeholder="Video veya Ses Bağlantısı" onpaste="setTimeout(() => kaliteyiOtomatikSaptar(this.value.trim()), 50)">
             </div>
-
 
             <div class="row mb-3">
               <div class="col-md-6 mb-2">
                 <label for="formatTipi" class="form-label">Format</label>
                 <select class="form-select" id="formatTipi" onchange="formatDegisti()">
-                  <option value="mp4" selected>Video (MP4)</option>
-                  <option value="mp3">Sadece Ses (MP3)</option>
+                      <!-- Video Formatları -->
+    <option value="mp4" selected>Video (MP4)</option>
+    <option value="webm">Video (WEBM)</option>
+    <option value="mkv">Video (MKV)</option>
+    
+    <!-- Ses Formatları -->
+    <option value="mp3">Ses (MP3)</option>
+    <option value="m4a">Ses (M4A)</option>
+    <option value="wav">Ses (WAV)</option>
+
                 </select>
               </div>
               <div class="col-md-6 mb-2" id="kaliteKutusu">
@@ -515,43 +694,345 @@ body {
               </div>
             </div>
 
+</div>
 
             <button type="submit" class="btn btn-custom w-100 py-2 mt-2" id="indirBtn">
               İndirmeyi Başlat
             </button>
+            </div>
           </form>
 
+        <!-- İlerleme ve Kapak Kartı (Başlangıçta Gizli) -->
+        <div id="progressCard" style="display: none; margin-top: 20px; background: rgba(255,255,255,0.05); padding: 35px; border-radius: 12px; text-align: center; max-width: 680px; margin-left: auto; margin-right: auto;">
 
-          <div id="durum" class="mt-4 text-center d-none">
-            <div class="progress mb-2" style="height: 10px; background-color: #1f1f1f; border-radius: 5px;">
-              <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" style="width: 100%;"></div>
+            
+            <!-- Kapak Resmi -->
+            <img id="cardThumbnail" src="" alt="Kapak Resmi" style="max-width: 360px; border-radius: 8px; margin-bottom: 15px;">
+            
+            <!-- Video Başlığı -->
+            <h4 id="cardTitle" style="color: #fff; margin-bottom: 10px; font-size: 20px;"></h4>
+            
+            <!-- İlerleme Durumu Metni -->
+            <p id="cardStatus" style="color: #ccc; font-size: 18px; margin-bottom: 10px;">Videonuz hazırlanıyor...</p>
+            
+            <!-- Yüzde İfadesi -->
+            <div id="cardPercent" style="font-size: 34px; font-weight: bold; color: #ffffff; margin-bottom: 10px;">0%</div>
+            
+            <!-- İlerleme Barı -->
+            <div style="width: 100%; background: #333; height: 14px; border-radius: 5px; overflow: hidden; margin-bottom: 15px;">
+                <div id="progressBar" style="width: 0%; height: 100%; background: linear-gradient(135deg, #6366f1, #3b82f6); transition: width 0.3s;"></div>
+
             </div>
-            <p id="durumMetni" class="mb-0 text-muted small">İndirme işleniyor, lütfen bekleyin...</p>
-          </div>
+
+            <!-- İndir Butonu (İşlem bitince görünecek) -->
+        <!-- İşlem Bitince Görünecek Butonlar -->
+        <div id="actionButtons" style="display: none; margin-top: 20px; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <a id="downloadBtn" href="#" style="padding: 15px 30px; background: linear-gradient(135deg, #0b8a4f, #15b76c); color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 17px; box-shadow: 0 4px 15px rgba(21, 183, 108, 0.35); display: inline-flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-download"></i> İndir
+            </a>
+            <button type="button" onclick="sifirlaForm()" style="padding: 15px 30px; background: linear-gradient(135deg, #6366f1, #3b82f6); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 17px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35); transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px;">
+    <i class="fa-solid fa-rotate-left"></i> Başka Video Dönüştür
+</button>
+
         </div>
-      </div>
+
     </div>
+    <!-- KESİCİ ARAYÜZÜ (PROFESYONEL MOD) -->
+<div id="trimmerSection" style="display: none; width: 100%; max-width: 1400px; margin: 30px auto; text-align: center; padding: 0 40px; box-sizing: border-box;">
+    <div style="text-align: center; margin-bottom: 15px;">
+    <img src="/static/logo.png" alt="AuDeo AI" style="max-height: 140px; width: auto; display: inline-block;">
+    <div style="margin-top: 12px;">
+        <span style="background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); padding: 6px 18px; border-radius: 20px; font-size: 0.95rem; color: #fff; font-weight: 600; display: inline-flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-scissors"></i> Ses ve Video Kesici
+        </span>
+    </div>
+</div>
+<p style="color: #aaa; font-size: 16px; margin-bottom: 25px;">Medya dosyanızı yükleyin, istediğiniz aralığı milisaniyelik hassasiyetle kesin.</p>
+
+<!-- 2. Aşama: Yüklendikten Sonra Açılacak Editör Alanı -->
+  <div id="trimmerEditorArea" style="display: none; padding: 24px 0 45px 0; width: 100%;">
+   <div id="bottomControlBanner">
+    <button type="button" id="playPauseBtn" style="background: #38bdf8; color: #0f172a; border: none; padding: 11px 45px; font-size: 16px; font-weight: bold; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center;" onmouseover="this.style.background='#0ea5e9'" onmouseout="this.style.background='#38bdf8'">
+        <span id="playPauseIcon">&#9658;</span>
+    </button>
+    
+    <!-- Banner'ın İCİNE eklenen zaman paneli -->
+    <span style="display: inline-flex; align-items: center; gap: 10px; margin-left: 35%; vertical-align: middle;">
+        <span style="display: inline-flex; align-items: center; background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; border-radius: 6px; padding: 6px 12px; gap: 6px;">
+            <span style="color: #94a3b8; font-size: 12px;">Başlangıç:</span>
+            <div style="position: relative; display: inline-flex; align-items: center;">
+                <input type="text" id="startTimeInput" value="00:00.0" style="background: transparent; border: none; color: #fff; font-family: monospace; font-size: 15px; width: 75px; outline: none; text-align: center;" />
+                <div style="display: flex; flex-direction: column; margin-left: 2px;">
+                    <button type="button" id="startUpBtn" style="background: #334155; border: none; color: #38bdf8; cursor: pointer; font-size: 10px; padding: 4px 8px; border-radius: 3px; line-height: 1; margin-bottom: 2px;">▲</button>
+                    <button type="button" id="startDownBtn" style="background: #334155; border: none; color: #38bdf8; cursor: pointer; font-size: 10px; padding: 4px 8px; border-radius: 3px; line-height: 1;">▼</button>
+                </div>
+            </div>
+        </span>
+        <span style="display: inline-flex; align-items: center; background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; border-radius: 6px; padding: 6px 12px; gap: 6px;">
+            <span style="color: #94a3b8; font-size: 12px;">Bitiş:</span>
+            <div style="position: relative; display: inline-flex; align-items: center;">
+                <input type="text" id="endTimeInput" value="00:00.0" style="background: transparent; border: none; color: #fff; font-family: monospace; font-size: 15px; width: 75px; outline: none; text-align: center;" />
+                <div style="display: flex; flex-direction: column; margin-left: 2px;">
+                    <button type="button" id="endUpBtn" style="background: #334155; border: none; color: #38bdf8; cursor: pointer; font-size: 10px; padding: 4px 8px; border-radius: 3px; line-height: 1; margin-bottom: 2px;">▲</button>
+                    <button type="button" id="endDownBtn" style="background: #334155; border: none; color: #38bdf8; cursor: pointer; font-size: 10px; padding: 4px 8px; border-radius: 3px; line-height: 1;">▼</button>
+                </div>
+            </div>
+        </span>
+    </span>
+</div>
+
+    <!-- Video / Ses Önizleme -->
+    <video id="trimmerPreview" controls style="width: 100%; max-height: 280px; border-radius: 10px; background: #000; margin-bottom: 20px; display: none;"></video>
+
+    <!-- Dalga Formu / Slider Alanı -->
+<div id="trimmerWaveformContainer" style="position: relative; margin: 20px 0 15px 0; padding: 0 10px 25px 10px; width: 100%; box-sizing: border-box;">
+    <div id="mediaFileName" style="position: relative; top: -25px; right: 0; font-size: 13px; color: #ffffff; font-style: italic; pointer-events: none; max-width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; z-index: 99;"></div>
+    <div id="regionStartLabel" style="position: absolute; bottom: -22px; left: 0px; font-size: 11px; color: #38bdf8; font-family: monospace; z-index: 7; pointer-events: none;">00:00.00</div>
+    <div id="regionEndLabel" style="position: absolute; bottom: -22px; right: 0px; font-size: 11px; color: #38bdf8; font-family: monospace; z-index: 7; pointer-events: none;">00:00.00</div>
+    <div id="hoverTimeIndicator" style="display: none; position: absolute; top: -30px; transform: translateX(-50%); background: #000000; color: #ffffff; padding: 3px 8px; font-size: 12px; border-radius: 4px; pointer-events: none; z-index: 99999; font-family: monospace; border: 1px solid rgba(255,255,255,0.3);">00:00.0</div>
+<div id="hoverLine" style="display: none; position: absolute; top: 0; height: 100px; width: 2px; background: #ffffff; pointer-events: none; z-index: 99998;"></div>
+
+</div>
+
+  <!-- Araç Çubuğu Butonları -->
+<div id="waveformToolbar" style="display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 20px;">
+    <button id="toolCutBtn" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #f8fafc; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;">Kes</button>
+    
+    <button id="toolDeleteBtn" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #f8fafc; padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;">Sil</button>
+    
+    <button id="toolUndoBtn" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #f8fafc; width: 38px; height: 38px; border-radius: 8px; font-size: 16px; cursor: pointer;" title="Geri Al">↶</button>
+    
+    <button id="toolRedoBtn" style="background: rgba(30, 41, 59, 0.8); border: 1px solid #475569; color: #f8fafc; width: 38px; height: 38px; border-radius: 8px; font-size: 16px; cursor: pointer;" title="İleri Al">↷</button>
+</div>
+
+  </div>
+  
+  <!-- 1. Aşama: Merkez Yükleme Kutusu (DropZone) -->
+  <div id="trimmerDropZone" style="max-width: 680px; width: 100%; margin: 0 auto; padding: 45px 35px; text-align: center; border-radius: 16px; background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
+    <div style="width: 64px; height: 64px; margin: 0 auto 12px auto; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #3b82f6); font-size: 28px; color: #ffffff;"><i class="fa-solid fa-photo-film"></i></div>
+
+    <h3 style="color: #fff; margin-bottom: 6px; font-size: 22px; font-weight: 600;">Dosya Seçin veya Buraya Sürükleyin</h3>
+    <p style="color: #666; font-size: 15px; margin-bottom: 20px;">MP3, WAV, MP4, WEBM ve daha fazlası desteklenir</p>
+    <button type="button" style="background: linear-gradient(135deg, #6366f1, #3b82f6); color: #ffffff; border: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; cursor: pointer;">Dosya Seç</button>
+    <input type="file" id="trimmerFileInput" accept="video/*,audio/*" style="display: none;">
+  </div>
+      </div>
   </main>
 
-
 <script>
+// --- ZAMAN KONTROL PANELİ VE TUTAMAK SENKRONİZASYONU ---
+function formatTime(seconds) {
+    if (isNaN(seconds)) return "00:00.0";
+    const mins = Math.floor(seconds / 60);
+    const secs = (seconds % 60).toFixed(1);
+    const paddedMins = mins < 10 ? "0" + mins : mins;
+    const paddedSecs = secs < 10 ? "0" + secs : secs;
+    return `${paddedMins}:${paddedSecs}`;
+}
+
+
+function parseTimeToSeconds(timeStr) {
+    try {
+        const parts = timeStr.split(':');
+        if (parts.length === 2) {
+            const m = parseFloat(parts[0]) || 0;
+            const s = parseFloat(parts[1]) || 0;
+            return m * 60 + s;
+        }
+    } catch (e) {
+        console.error("Zaman ayrıştırma hatası", e);
+    }
+    return 0;
+}
+
+const startTimeInput = document.getElementById('startTimeInput');
+const endTimeInput = document.getElementById('endTimeInput');
+
+// Aktif region nesnesini güvenli bir şekilde bulma yardımıcısı
+function getActiveRegion() {
+    // Projende regions eklentisi hangi isimle tutuluyorsa hepsini kontrol edelim
+    const regManager = window.wsRegions || window.regions || (window.wavesurfer && window.wavesurfer.regions);
+    if (!regManager) return null;
+    
+    // List veya getRegions metoduna göre region'ı alalım
+    let regionsList = [];
+    if (typeof regManager.getRegions === 'function') {
+        regionsList = regManager.getRegions();
+    } else if (regManager.list) {
+        regionsList = Object.values(regManager.list);
+    }
+    return regionsList.length > 0 ? regionsList[0] : null;
+}
+
+// 1. Her 200ms'de bir kutucukları aktif tutamaklarla senkronize et
+setInterval(() => {
+    const reg = getActiveRegion();
+    if (reg) {
+        if (startTimeInput && document.activeElement !== startTimeInput) {
+            startTimeInput.value = formatTime(reg.start);
+        }
+        if (endTimeInput && document.activeElement !== endTimeInput) {
+            endTimeInput.value = formatTime(reg.end);
+        }
+    }
+}, 200);
+
+// 2. Ok tuşları ile milimetrik (0.1s) artırma / azaltma ve Basılı Tutma (Hold-to-Repeat) Mantığı
+let holdInterval = null;
+
+function startHolding(target, amount) {
+    if (holdInterval) return;
+    adjustTime(target, amount); // İlk tıklamada hemen 1 adım işlet
+    
+    // 150 milisaniyede bir sürekli artır/azalt
+    holdInterval = setInterval(() => {
+        adjustTime(target, amount);
+    }, 150);
+}
+
+function stopHolding() {
+    if (holdInterval) {
+        clearInterval(holdInterval);
+        holdInterval = null;
+    }
+}
+
+const setupHoldEvent = (btnId, target, amount) => {
+    const btn = document.getElementById(btnId);
+    if (!btn) return;
+    
+    btn.addEventListener('mousedown', () => startHolding(target, amount));
+    btn.addEventListener('mouseup', stopHolding);
+    btn.addEventListener('mouseleave', stopHolding);
+    
+    btn.addEventListener('touchstart', (e) => { e.preventDefault(); startHolding(target, amount); });
+    btn.addEventListener('touchend', stopHolding);
+};
+
+// Okları bağla
+setupHoldEvent('startUpBtn', 'start', 0.1);
+setupHoldEvent('startDownBtn', 'start', -0.1);
+setupHoldEvent('endUpBtn', 'end', 0.1);
+setupHoldEvent('endDownBtn', 'end', -0.1);
+
+function adjustTime(target, amount) {
+    if (typeof wavesurfer === 'undefined' || !wavesurfer || !window.wsRegions) return;
+    
+    let regionsList = [];
+    if (typeof window.wsRegions.getRegions === 'function') {
+        regionsList = window.wsRegions.getRegions();
+    } else if (window.wsRegions.list) {
+        regionsList = Object.values(window.wsRegions.list);
+    }
+    
+    if (regionsList.length === 0) return;
+    const reg = regionsList[0];
+
+    if (target === 'start') {
+        let currentStart = reg.start !== undefined ? reg.start : 0;
+        let newStart = Math.max(0, parseFloat((currentStart + amount).toFixed(1)));
+        
+        if (newStart < reg.end) {
+            reg.setOptions({ start: newStart, end: reg.end });
+            if (startTimeInput) startTimeInput.value = formatTime(newStart);
+        }
+    } else {
+        const maxDuration = wavesurfer.getDuration();
+        let currentEnd = reg.end !== undefined ? reg.end : maxDuration;
+        let newEnd = Math.min(maxDuration, parseFloat((currentEnd + amount).toFixed(1)));
+        
+        if (newEnd > reg.start) {
+            reg.setOptions({ start: reg.start, end: newEnd });
+            if (endTimeInput) endTimeInput.value = formatTime(newEnd);
+        }
+    }
+}
+
+
+
+
+// 3. Klavyeden manuel yazıp değiştirince tutamaçları güncelle
+[startTimeInput, endTimeInput].forEach((input, index) => {
+    if (!input) return;
+    const targetKey = index === 0 ? 'start' : 'end';
+
+    input.addEventListener('change', (e) => {
+        const val = parseTimeToSeconds(e.target.value);
+        const reg = getActiveRegion();
+        if (reg) {
+            if (targetKey === 'start') {
+                if (val < reg.end) {
+                    if (typeof reg.update === 'function') reg.update({ start: val });
+                    else reg.start = val;
+                }
+            } else {
+                if (val > reg.start) {
+                    if (typeof reg.update === 'function') reg.update({ end: val });
+                    else reg.end = val;
+                }
+            }
+        }
+    });
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const desktopSidebar = document.getElementById('desktopSidebar');
   const mainWrapper = document.querySelector('.main-wrapper');
   const desktopToggleBtn = document.getElementById('desktopToggleBtn');
   const desktopOpenBtn = document.getElementById('desktopOpenBtn');
 
-  // --- MASAÜSTÜ SIDEBAR TOGGLE ---
   function toggleDesktopSidebar() {
     desktopSidebar.classList.toggle('collapsed');
-    mainWrapper.classList.toggle('full-width');
+    
+    const banner = document.getElementById('bottomControlBanner');
+    if (banner) {
+        if (desktopSidebar.classList.contains('collapsed')) {
+            banner.style.left = '0px';
+        } else {
+            banner.style.left = '70px';
+        }
+    }
 
     if (desktopSidebar.classList.contains('collapsed')) {
-      desktopOpenBtn.style.display = 'block';
+        desktopOpenBtn.style.display = 'block';
     } else {
-      desktopOpenBtn.style.display = 'none';
+        desktopOpenBtn.style.display = 'none';
     }
-  }
+}
+
+// --- ALT BANNER OYNAT/DURDUR VE ANLIK İKON DEĞİŞİMİ ---
+const playPauseBtn = document.getElementById('playPauseBtn');
+const iconSpan = document.getElementById('playPauseIcon');
+
+if (playPauseBtn) {
+    playPauseBtn.addEventListener('click', () => {
+        if (typeof wavesurfer !== 'undefined' && wavesurfer) {
+            if (wavesurfer.isPlaying()) {
+                wavesurfer.pause();
+                if (iconSpan) iconSpan.innerText = '▶';
+            } else {
+                wavesurfer.play();
+                if (iconSpan) iconSpan.innerText = '❚❚'; // veya '■'
+            }
+        } else {
+            console.warn("Wavesurfer henüz hazır değil!");
+        }
+    });
+}
+
+// Wavesurfer kendi kendine durduğunda veya bittiğinde ikonu resetleme
+setInterval(() => {
+    if (typeof wavesurfer !== 'undefined' && wavesurfer && iconSpan) {
+        if (!wavesurfer.isPlaying() && iconSpan.innerText === '❚❚') {
+            iconSpan.innerText = '▶';
+        }
+    }
+}, 300);
+
+
+
+
+
 
   if (desktopToggleBtn) desktopToggleBtn.addEventListener('click', toggleDesktopSidebar);
   if (desktopOpenBtn) desktopOpenBtn.addEventListener('click', toggleDesktopSidebar);
@@ -567,10 +1048,304 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // --- KESİCİ ARAYÜZ KONTROLÜ ---
+    const trimmerSection = document.getElementById('trimmerSection');
+
+    document.addEventListener('click', (e) => {
+      const toolBtn = e.target.closest('[data-tool]');
+      if (!toolBtn) return;
+
+      const toolType = toolBtn.getAttribute('data-tool');
+
+                if (toolType === 'trimmer') {
+        e.preventDefault();
+
+        // Menüdeki aktifliği değiştir
+        document.querySelectorAll('[data-tool]').forEach(btn => btn.classList.remove('active'));
+        toolBtn.classList.add('active');
+
+        // Ana İndirici görünümünün tamamını gizle
+        const downloaderView = document.getElementById('downloaderToolView');
+        if (downloaderView) downloaderView.style.display = 'none';
+        const progressCard = document.getElementById('progressCard');
+        if (progressCard) progressCard.style.display = 'none';
+
+        // Kesici bölümünü göster
+        if (trimmerSection) trimmerSection.style.display = 'block';
+
+      } else if (toolType === 'downloader') {
+        e.preventDefault();
+
+        // Menüdeki aktifliği değiştir
+        document.querySelectorAll('[data-tool]').forEach(btn => btn.classList.remove('active'));
+        toolBtn.classList.add('active');
+
+        // Ana İndirici görünümünü göster
+        const downloaderView = document.getElementById('downloaderToolView');
+        if (downloaderView) downloaderView.style.display = 'block';
+        const progressCard = document.getElementById('progressCard');
+        if (progressCard) progressCard.style.display = 'none';
+        // Kesici bölümünü gizle
+        if (trimmerSection) trimmerSection.style.display = 'none';
+      }
+
+    });
+    // --- DOSYA SEÇME / SÜRÜKLE-BIRAK EVENT'LERİ ---
+const dropZone = document.getElementById('trimmerDropZone');
+const fileInput = document.getElementById('trimmerFileInput');
+const editorArea = document.getElementById('trimmerEditorArea');
+const previewVideo = document.getElementById('trimmerPreview');
+
+let wavesurfer = null;
+let wsRegions = null;
+
+if (dropZone && fileInput) {
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#2563eb';
+    dropZone.style.background = '#1a1a24';
+  });
+
+  dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = '#2a2a35';
+    dropZone.style.background = '#121216';
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = '#2a2a35';
+    dropZone.style.background = '#121216';
+    if (e.dataTransfer.files.length > 0) {
+      handleFileSelect(e.dataTransfer.files[0]);
+    }
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      handleFileSelect(e.target.files[0]);
+    }
+  });
+}
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  const ms = Math.floor((seconds % 1) * 100);
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+}
+
+function handleFileSelect(file) {
+    console.log("handleFileSelect tetiklendi, gelen dosya:", file);
 
 
+    if (!file) return;
+
+    let fileNameDisplay = document.getElementById('mediaFileName') || document.createElement('div');
+    fileNameDisplay.id = 'mediaFileName';
+    fileNameDisplay.innerText = file.name;
+    fileNameDisplay.style.cssText = 'position: absolute; top: 10px; left: 10px; z-index: 99999; background: #0f172a; color: #38bdf8; padding: 6px 12px; font-size: 13px; font-weight: bold; border-radius: 6px; display: block !important;';
+    
+    const trimmerBox = document.getElementById('trimmerEditorArea');
+    if (trimmerBox) {
+        trimmerBox.style.position = 'relative';
+        trimmerBox.appendChild(fileNameDisplay);
+    }
+
+
+  // 1. İndiriciyi tamamen gizle
+  const downloaderView = document.getElementById('downloaderToolView');
+  if (downloaderView) downloaderView.style.display = 'none';
+
+  // 2. Sol menüdeki aktif sekme ışığını/durumunu Kesici'ye kaydır
+  document.querySelectorAll('.sidebar-nav-item, .nav-link').forEach(el => el.classList.remove('active'));
+  const trimmerMenuBtn = document.querySelector('[data-tool="trimmer"]') || document.querySelector('a[href*="trimmer"]');
+  if (trimmerMenuBtn) trimmerMenuBtn.classList.add('active');
+
+  const trimmerSection = document.getElementById('trimmerSection');
+  const dropZone = document.getElementById('trimmerDropZone');
+  const editorArea = document.getElementById('trimmerEditorArea');
+  const previewVideo = document.getElementById('trimmerPreview');
+
+  if (trimmerSection) trimmerSection.style.display = 'block';
+  if (dropZone) dropZone.style.display = 'none';
+  if (editorArea) editorArea.style.display = 'block';
+
+  const fileUrl = URL.createObjectURL(file);
+
+  if (previewVideo) {
+    if (file.type.startsWith('video/')) {
+      previewVideo.src = fileUrl;
+      previewVideo.style.display = 'block';
+    } else {
+      previewVideo.style.display = 'none';
+    }
+  }
+
+  // Sadece Kesiciye ait yeni container'ı temizle
+  const container = document.getElementById('trimmerWaveformContainer');
+  if (container) container.innerHTML = '';
+
+  // Wavesurfer'ı kesin olarak Kesici alanına bağla
+  wavesurfer = WaveSurfer.create({
+    container: '#trimmerWaveformContainer',
+    waveColor: '#1e293b',
+    progressColor: '#10b981',
+    cursorColor: '#38bdf8',
+    height: 100,
+    width: '100%',
+    barWidth: 2,
+    barGap: 2,
+    barRadius: 2,
+    url: fileUrl
+});
+window.wavesurfer = wavesurfer;
+    // Tıklandığında imlecin üstünde kalıcı ikinci süre balonu oluştur (Güvenli ve hafif mimari)
+    const trimmerContainer = document.getElementById('trimmerWaveformContainer');
+    if (trimmerContainer && window.wavesurfer) {
+        trimmerContainer.addEventListener('click', (e) => {
+            setTimeout(() => {
+                const currentTime = window.wavesurfer.getCurrentTime();
+                const duration = window.wavesurfer.getDuration();
+                if (!duration || duration <= 0) return;
+
+                let permInd = document.getElementById('permanentClickTimeIndicator');
+                if (!permInd) {
+                    permInd = document.createElement('div');
+                    permInd.id = 'permanentClickTimeIndicator';
+                    permInd.style.cssText = 'position: absolute; top: -25px; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95); border: 1px solid #475569; border-radius: 4px; padding: 2px 6px; font-size: 11px; color: #38bdf8; z-index: 999; pointer-events: none; white-space: nowrap; font-weight: 500; display: none;';
+                    trimmerContainer.appendChild(permInd);
+                }
+
+                const mins = Math.floor(currentTime / 60);
+                const secs = (currentTime % 60).toFixed(1);
+                permInd.innerText = `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+
+                const rect = trimmerContainer.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                permInd.style.left = clickX + 'px';
+                permInd.style.display = 'block';
+            }, 10);
+        });
+    }
+
+// Fareyle gezinme süre ve çizgi göstergesini otomatik ekle ve çalıştır
+const waveContainer = document.getElementById('trimmerWaveformContainer');
+if (waveContainer) {
+    waveContainer.style.position = 'relative';
+
+    // Süre göstergesi elementini oluştur (yoksa)
+        let timeInd = document.getElementById('hoverTimeIndicator');
+    if (!timeInd) {
+        timeInd = document.createElement('div');
+        timeInd.id = 'hoverTimeIndicator';
+        timeInd.style.cssText = 'display:none; position:absolute; top: -25px; transform:translateX(-50%); color:#fff; font-size:12px; pointer-events:none; z-index:99999; font-family:sans-serif; background:transparent; font-weight:500; text-shadow: 0 1px 2px rgba(0,0,0,0.8);';
+        timeInd.innerText = '00:00.0';
+        waveContainer.appendChild(timeInd);
+    }
+
+
+    // Dikey çizgi elementini oluştur (yoksa)
+    let line = document.getElementById('hoverLine');
+    if (!line) {
+        line = document.createElement('div');
+        line.id = 'hoverLine';
+        line.style.cssText = 'display:none; position:absolute; top:0; height:100px; width:2px; background:#fff; pointer-events:none; z-index:99998;';
+        waveContainer.appendChild(line);
+    }
+
+    // Fare hareket olayları
+    waveContainer.onmousemove = function(e) {
+        if (typeof wavesurfer === 'undefined' || !wavesurfer) return;
+        const duration = wavesurfer.getDuration();
+        if (!duration) return;
+
+        const rect = waveContainer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const percentage = Math.max(0, Math.min(1, x / rect.width));
+        const currentTime = percentage * duration;
+
+        const minutes = Math.floor(currentTime / 60);
+        const seconds = (currentTime % 60).toFixed(1);
+        
+        timeInd.style.display = 'block';
+        timeInd.style.left = x + 'px';
+        timeInd.innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(4, '0')}`;
+
+        line.style.display = 'block';
+        line.style.left = x + 'px';
+    };
+
+    waveContainer.onmouseleave = function() {
+        timeInd.style.display = 'none';
+        line.style.display = 'none';
+    };
+}
+
+
+
+
+  const RegionsPlugin = window.WaveSurfer.Regions;
+wsRegions = wavesurfer.registerPlugin(RegionsPlugin.create());
+window.wsRegions = wsRegions;
+
+
+wavesurfer.on('ready', () => {
+    wsRegions.addRegion({
+        start: 0,
+        end: wavesurfer.getDuration(),
+        color: 'transparent',
+        drag: false,
+        resize: true
+    });
+
+    const duration = wavesurfer.getDuration();
+
+    let startLabel = document.getElementById('regionStartLabel');
+    if (!startLabel) {
+        startLabel = document.createElement('div');
+        startLabel.id = 'regionStartLabel';
+        document.getElementById('trimmerWaveformContainer').appendChild(startLabel);
+    }
+    startLabel.style.cssText = 'position: absolute; bottom: 2px; left: 0px; font-size: 11px; color: #38bdf8; font-family: monospace; pointer-events: none; z-index: 7;';
+    startLabel.innerText = formatTime(0);
+
+    let endLabel = document.getElementById('regionEndLabel');
+    if (!endLabel) {
+        endLabel = document.createElement('div');
+        endLabel.id = 'regionEndLabel';
+        document.getElementById('trimmerWaveformContainer').appendChild(endLabel);
+    }
+    endLabel.style.cssText = 'position: absolute; bottom: 2px; right: 0px; font-size: 11px; color: #38bdf8; font-family: monospace; pointer-events: none; z-index: 7;';
+    endLabel.innerText = formatTime(duration);
 });
 
+    wsRegions.on('region-update', (reg) => {
+    const startLabel = document.getElementById('regionStartLabel');
+    const endLabel = document.getElementById('regionEndLabel');
+
+    if (startLabel) startLabel.innerText = formatTime(reg.start);
+    if (endLabel) endLabel.innerText = formatTime(reg.end);
+
+    // Doğrudan region'ın DOM elementinin sol piksel konumunu alıyoruz
+    if (reg.element) {
+        const startX = reg.element.offsetLeft;
+        const endX = startX + reg.element.offsetWidth;
+
+        if (startLabel) {
+            startLabel.style.left = `${startX - 15}px`;
+        }
+        if (endLabel) {
+            endLabel.style.right = 'auto';
+            endLabel.style.left = `${endX - 35}px`;
+        }
+    }
+});
+
+
+}
+});
 
     const urlInput = document.getElementById('videoUrl');
 
@@ -611,124 +1386,120 @@ async function kaliteyiOtomatikSaptar(url) {
     }
 }
 
-
-
-
-
-
-
 function formatDegisti() {
     const format = document.getElementById('formatTipi').value;
     const kaliteKutusu = document.getElementById('kaliteKutusu');
     
-    if (format === 'mp3') {
+    // Ses formatlarında kalite kutusunu gizle, videolarda göster
+    if (['mp3', 'm4a', 'wav'].includes(format)) {
         kaliteKutusu.style.display = 'none';
     } else {
         kaliteKutusu.style.display = 'block';
     }
 }
 
+function sifirlaForm() {
+    document.getElementById('downloadForm').style.display = 'block';
+    document.getElementById('progressCard').style.display = 'none';
+    document.getElementById('actionButtons').style.display = 'none';
+    document.getElementById('downloadForm').reset();
+}
 
 document.getElementById('downloadForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const url = document.getElementById('videoUrl').value;
     const format = document.getElementById('formatTipi').value;
-    const kalite = document.getElementById('videoKalitesi').value;
-    
-    const durum = document.getElementById('durum');
-    const durumMetni = document.getElementById('durumMetni');
-    const indirBtn = document.getElementById('indirBtn');
+    const kalite = document.getElementById('videoKalitesi') ? document.getElementById('videoKalitesi').value : 'en_yuksek';
+
+    const downloadForm = document.getElementById('downloadForm');
+    const progressCard = document.getElementById('progressCard');
+    const cardThumbnail = document.getElementById('cardThumbnail');
+    const cardTitle = document.getElementById('cardTitle');
+    const cardStatus = document.getElementById('cardStatus');
+    const cardPercent = document.getElementById('cardPercent');
     const progressBar = document.getElementById('progressBar');
-    
-    durum.classList.remove('d-none');
-    indirBtn.disabled = true;
-    progressBar.style.width = '0%';
-    durumMetni.innerText = "İndirme başlatıldı (%0)...";
-          indirBtn.classList.remove('btn-success-custom');
-      indirBtn.classList.add('btn-custom');
+    const downloadBtn = document.getElementById('downloadBtn');
 
+    // 1. Giriş Formunu Gizle, İlerleme Kartını Göster
+    downloadForm.style.display = 'none';
+    if (progressCard) progressCard.style.display = 'block';
+    if (downloadBtn) downloadBtn.style.display = 'none';
 
-
-    let apiUrl = `/download?url=${encodeURIComponent(url)}&format_tipi=${format}`;
-    if (format === 'mp4') {
-        apiUrl += `&video_kalitesi=${kalite}`;
-    }
+    if (cardStatus) cardStatus.innerText = 'Video bilgileri alınıyor...';
+    if (cardPercent) cardPercent.innerText = '0%';
+    if (progressBar) progressBar.style.width = '0%';
 
     try {
+        // Kapak Resmi ve Başlık Çek
+        const infoRes = await fetch(`/info?url=${encodeURIComponent(url)}`);
+        if (infoRes.ok) {
+            const infoData = await infoRes.json();
+            if (cardThumbnail && infoData.kapak_resmi) cardThumbnail.src = infoData.kapak_resmi;
+            if (cardTitle && infoData.baslik) cardTitle.innerText = infoData.baslik;
+        }
+
+        if (cardStatus) cardStatus.innerText = 'Videonuz indiriliyor ve dönüştürülüyor...';
+
+        // Akıcı Yüzde İlerlemesi Yapay Simülasyonu
+        let currentProgress = 5;
+        const progressInterval = setInterval(() => {
+            if (currentProgress < 90) {
+                currentProgress += Math.floor(Math.random() * 5) + 1;
+                if (progressBar) progressBar.style.width = currentProgress + '%';
+                if (cardPercent) cardPercent.innerText = currentProgress + '%';
+            }
+        }, 400);
+
+        // Medya İndirme İsteği
+        let apiUrl = `/download?url=${encodeURIComponent(url)}&format_tipi=${format}`;
+        if (format === 'mp4') {
+            apiUrl += `&video_kalitesi=${kalite}`;
+        }
+
         const response = await fetch(apiUrl, { method: 'POST' });
+        clearInterval(progressInterval);
+
         if (!response.ok) throw new Error('İndirme sırasında bir hata oluştu.');
 
-        const reader = response.body.getReader();
-        const contentLength = +response.headers.get('Content-Length');
-        let receivedLength = 0;
-        let chunks = [];
+        // Yüzdeyi %100 Yap
+        if (progressBar) progressBar.style.width = '100%';
+        if (cardPercent) cardPercent.innerText = '100%';
+        if (cardStatus) cardStatus.innerHTML = '<i class="fa-solid fa-check"></i> Dönüşüm tamamlandı!';
+if (cardStatus) cardStatus.style.color = '#15b76c';
 
-        while(true) {
-            const {done, value} = await reader.read();
-            if (done) break;
 
-            chunks.push(value);
-            receivedLength += value.length;
+        const blob = await response.blob();
+        const downloadUrl = window.URL.createObjectURL(blob);
 
-            if (contentLength) {
-                const yuzde = Math.round((receivedLength / contentLength) * 100);
-                progressBar.style.width = `${yuzde}%`;
-                durumMetni.innerText = `İndiriliyor: %${yuzde}`;
+        // Orijinal Dosya Adı Ayıklama
+        let filename = `medya.${format}`;
+        const contentDisposition = response.headers.get('Content-Disposition');
+        if (contentDisposition) {
+            const match = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
+            if (match && match[1]) {
+                let extracted = decodeURIComponent(match[1]).trim();
+                if (!extracted.endsWith('.mp4') && !extracted.endsWith('.mp3')) {
+                    extracted += '.' + format;
+                }
+                filename = extracted;
             }
         }
 
-              // Seçilen formata göre uzantı ve medya türünü belirle
-      const uzanti = format === 'mp3' ? '.mp3' : '.mp4';
-      const mimeType = format === 'mp3' ? 'audio/mpeg' : 'video/mp4';
-
-      const blob = new Blob(chunks, { type: mimeType });
-      const downloadUrl = window.URL.createObjectURL(blob);
-
-      const a = document.createElement('a');
-      a.href = downloadUrl;
-
-            // Sunucudan gelen başlığı kontrol et
-      const contentDisposition = response.headers.get('Content-Disposition');
-      let filename = `indirilen_medya${uzanti}`;
-
-
-      if (contentDisposition) {
-        const match = contentDisposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';]+)["']?/i);
-        if (match && match[1]) {
-          let extracted = decodeURIComponent(match[1]).trim();
-          if (!extracted.endsWith('.mp4') && !extracted.endsWith('.mp3')) {
-            extracted += uzanti;
-          }
-          filename = extracted;
+        const downloadBtn = document.getElementById('downloadBtn');
+        if (downloadBtn) {
+            downloadBtn.href = downloadUrl;
+            downloadBtn.download = filename;
+            downloadBtn.style.display = 'inline-block';
         }
-      }
+        document.getElementById('actionButtons').style.display = 'flex';
 
 
 
-      a.download = filename;
-
-
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-              // İndirme bittiğinde yeşil yap
-      indirBtn.classList.remove('btn-custom');
-      indirBtn.classList.add('btn-success-custom');
-      durumMetni.innerText = "İndirme tamamlandı! Dosyanız kaydedildi.";
-
-      // Kaydet penceresi açıldıktan 3 saniye sonra eski haline döndür
-      setTimeout(() => {
-        indirBtn.classList.remove('btn-success-custom');
-        indirBtn.classList.add('btn-custom');
-        durumMetni.innerText = "";
-      }, 3000);
 
     } catch (err) {
-        durumMetni.innerText = "Hata: " + err.message;
-    } finally {
-        indirBtn.disabled = false;
+        if (cardStatus) cardStatus.innerText = 'Hata: ' + err.message;
+        console.error('İşlem hatası:', err);
     }
 });
 
@@ -768,7 +1539,6 @@ async function loadProtectedLUT(lutName) {
       console.log("FFmpeg motoru hazır!");
     }
   }
-
 
   window.addEventListener('DOMContentLoaded', loadFFmpeg);
 
@@ -867,11 +1637,6 @@ async function handleMediaPipeline(sourceType, sourceData, userOptions = {}) {
   }
 }
 
-
-
 </script>
-
-
 </body>
 </html>
-
